@@ -12,7 +12,7 @@
 #define COR3 "\033[35m" // roxo
 // https://en.wikipedia.org/wiki/ANSI_escape_code#3-bit_and_4-bit
 
-#define MAX 0xFFFF
+#define MAX 0xFFFF // 16 bits
 #define ioInvalid ("\nComando inválido.\a")
 #define ioExit ("\nSaindo...")
 #define ioSizeError ("\nO valor máximo é %d.")
@@ -27,13 +27,13 @@ typedef struct i2s_buffer_t {
 } i2sBuffer;
 
 // I/O
-unsigned int getnof(const char *prompt, unsigned int max);
 char *get_input(char *input, int max);
-double get_value(double *value);
+double get_value(void);
+unsigned int get_value_uint(unsigned int max);
 
-void i2s_init(void);                              // platform-specific init (STM32/ESP/etc.)
-bool i2s_start_capture(i2sBuffer *buf);          // start DMA
+void i2s_init(void);                              
+bool i2s_start_capture(i2sBuffer *buf);         
 void i2s_stop_capture(void);
-int32_t i2s_convert_24bit_signed(int32_t raw);   // handles sign extension
+int32_t i2s_convert_24bit_signed(int32_t raw);
 
 #endif

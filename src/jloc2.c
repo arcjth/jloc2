@@ -1,4 +1,4 @@
-#include "jloc2d.h"
+#include "jloc2.h"
 #include <stdio.h>
 
 void loc2d_build_tdoa_system(const vec2 mics[4], int ref_idx, const double r_unit[3], linSys3 *sys) {
@@ -26,7 +26,7 @@ void loc2d_build_tdoa_system(const vec2 mics[4], int ref_idx, const double r_uni
     lin3_print("Sistema TDOA 3x3", sys);   // reuse your printer
 }
 
-void loc2d_solve_tdoa(linSys3 *sys, sndLoc2D *loc) {
+void loc2d_solve_tdoa(linSys3 *sys, sndLoc2 *loc) {
     lin3_gaussian_solve(sys);               // numerical stable (your pivoting)
     if (!sys->solved) {
         printf(str_loc_invalid, COR3, COR0);

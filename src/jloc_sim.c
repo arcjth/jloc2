@@ -1,8 +1,8 @@
-#include "jloc2d.h"
+#include "jloc2.h"
 #include <stdio.h>
 #include <math.h>
 
-static const char *str_sim_menu = "\n%s=== Simulador/Calculadora TDOA ===%s\n1. Simular fonte\n2. Inserir r manual (calculadora)\n3. Sair\n> ";
+static const char *str_sim_menu = "\n%s=== Simulador/Calculadora TDOA ===%s\n1. Simular fonte do som\n2. Inserir r manual (calculadora)\n3. Sair\n> ";
 static const char *str_sim_src  = "%sFonte simulada em (%.4f, %.4f) unidades%s\n";
 
 void sim_generate_r(double src_x_unit, double src_y_unit, double r_out[3]) {
@@ -25,24 +25,24 @@ void sim_generate_r(double src_x_unit, double src_y_unit, double r_out[3]) {
 
 void jloc_simulator(void) {
     linSys3 sys = {0};
-    sndLoc2D loc = {0};
+    sndLoc2 loc = {0};
     double r_unit[3];
-    int choice;
+    unsigned int choice = 0;
 
     while (1) {
         printf(str_sim_menu, COR2, COR0);
-        choice = (int)get_value(&(double){0});   // reuse your get_value (it already handles Brazilian comma)
-
+        choice = get_value_uint(3);
+        
         if (choice == 3) break;
-
         if (choice == 1) {                      // SIMULATE
-            double x_unit = 0, y_unit = 0;
-            printf("%sX unit: %s", COR1, COR0); x_unit = get_value(&x_unit);
-            printf("%sY unit: %s", COR1, COR0); y_unit = get_value(&y_unit);
+            double x_unit = 0.0, y_unit = 0.0;
+            printf("%sX unit: %s", COR1, COR0); x_unit = get_value();
+            printf("%sY unit: %s", COR1, COR0); y_unit = get_value();
+            printf("%lf\t%lf\n", x_unit, y_unit);
             sim_generate_r(x_unit, y_unit, r_unit);
         } else if (choice == 2) {               // MANUAL CALCULATOR
             printf("%sDigite r1, r2, r3 (unidades):%s\n", COR1, COR0);
-            for (int i = 0; i < 3; ++i) r_unit[i] = get_value(&r_unit[i]);
+            for (int i = 0; i < 3; ++i) r_unit[i] = get_value();
         }
 
         loc2d_build_tdoa_system(MIC_POS_UNIT, 0, r_unit, &sys);

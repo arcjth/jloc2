@@ -13,7 +13,7 @@ typedef struct pol2_t {
     double mag, angle;
 } pol2;
 
-typedef struct linear_system_3x3 {
+typedef struct linear_sys3_t {
     double A[3][3];
     double b[3];
     double x[3];          // solução final (x0, x1, x2)

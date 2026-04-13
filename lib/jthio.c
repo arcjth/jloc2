@@ -15,29 +15,45 @@ char *get_input(char *input, int max) {
     input[strcspn(input, "\n")] = '\0';
     return input;
 }
-double get_value(double *value) {
+
+/**
+* @brief returns a double precision value, supports negatives, zero, 
+* non dot decimals (ex: EU, BR notations), cientific notation, etc.
+* for non-negative values, please use get_uvalue()
+ */
+double get_value(void) {
     const char *conversion_error = "\nUm erro pode ter ocorrido na conversão, verifique o valor inserido \n(dica: utilize not. científica (ex: 1,7E-9 = 1,7 nano, 1,0e6 = 1 milhão)).";
     char input[MAX];
-    *value = 0.0;
-    while (*value <= 0.0) {
+    double value = 0.0;
+    get_input(input, MAX);
+    for (char *pinput = input; *pinput != '\0'; pinput++) {
+        if (*pinput == ',') *pinput = '.'; // pra permitir a notação brasileira, europeia ou internacional
+    }
+    value = atof(input);
+    return value;
+}
+double get_uvalue(void) {
+    const char *conversion_error = "\nUm erro pode ter ocorrido na conversão, verifique o valor inserido \n(dica: utilize not. científica (ex: 1,7E-9 = 1,7 nano, 1,0e6 = 1 milhão)).";
+    char input[MAX];
+    double value = 0.0;
+    while (value <= 0.0) {
         get_input(input, MAX);
         for (char *pinput = input; *pinput != '\0'; pinput++) {
-            if (*pinput == ',') *pinput = '.'; // pra permitir a notação brasileira
+            if (*pinput == ',') *pinput = '.'; // pra permitir a notação brasileira, europeia ou internacional
         }
-        double t = atof(input);
-        /*if (t <= 0.0e50) { // número minusculamente pequenos vao cair aqui mas funcionar igual, não sei se tenho o que fazer a respeito, malditos floating point numbers
-            printf("%s", conversion_error); // não vejo razão pra não proibir 0 ou negativos
-        } else *value = t;   
-        usava isso no simulador de circuitos, mas não faz mais sentido. */
+        value = atof(input);
     }
-    return *value;
+    return value;
 }
-
-unsigned int getnof(const char *prompt, unsigned int max) {
+/** 
+* @brief same as get_value() but returns an unsigned integer, 
+* for positive double precision floats, use get_uvalue.
+* set @param[in] max to -1 to disable it.
+*/
+unsigned int get_value_uint(unsigned int max) {
     unsigned int nof = 0;
     char input[MAX];
     while(nof == 0) {
-        printf("%s", prompt);
         int value = atoi(get_input(input, MAX));
         if (value <= 0 ) {
             printf("%s", ioInvalid);
@@ -56,7 +72,6 @@ int32_t i2s_convert_24bit_signed(int32_t raw) {
 }
 
 void i2s_init(void) {
-    // TODO: your MCU-specific I2S + DMA config here (BCLK, LRCLK, 24-bit, slave mode)
-    // Example: HAL_I2S_Init(...); DMA circular mode
+    // TODO: colocar aqui inicializacao de vdd, por enquanto só roleplay I2S + DMA
     printf(str_i2s_init, COR2, I2S_CHANNELS, COR0);
 }

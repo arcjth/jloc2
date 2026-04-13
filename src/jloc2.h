@@ -16,7 +16,7 @@ typedef struct {
     double x, y;      // metros
     double d_ref;     // distância até mic de referência (metros)
     bool valid;
-} sndLoc2D;
+} sndLoc2;
 
 static const vec2 MIC_POS_UNIT[4] = {
     { 1.0,  0.0},   // m0
@@ -26,7 +26,9 @@ static const vec2 MIC_POS_UNIT[4] = {
 };
 
 void loc2d_build_tdoa_system(const vec2 mics[4], int ref_idx, const double r_unit[3], linSys3 *sys);
-void loc2d_solve_tdoa(linSys3 *sys, sndLoc2D *loc);   // usa Gaussian + escala para metros
+void loc2d_solve_tdoa(linSys3 *sys, sndLoc2 *loc);   // usa Gaussian + escala para metros
+
+void jloc_simulator(void);
 
 // retorna r a partir de Δt
 double loc2d_r_from_delta_t(double delta_t_sec);
