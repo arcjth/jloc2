@@ -1,0 +1,1 @@
+gcc -o out/tdoa_test #path -lm
